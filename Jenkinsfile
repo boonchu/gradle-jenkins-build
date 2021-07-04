@@ -49,9 +49,11 @@ spec:
 
         stage('Docker Build') {
             steps {
-                sh """
-                    cd src && docker-compose build
-                """
+                container("docker-compose") {
+                   sh """
+                      cd src && docker-compose build
+                   """
+                }
             }
         }
 
