@@ -29,7 +29,7 @@ spec:
                 withSonarQubeEnv(installationName: 'sonarqube-server') {
                     sh """
                         echo ${env.SONAR_HOST_URL}
-                        ./gradlew sonarqube
+                        cd src && ./gradlew sonarqube
                     """
                 }
             }
