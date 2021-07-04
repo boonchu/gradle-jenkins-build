@@ -20,7 +20,7 @@ spec:
     stages {
         stage('Clone sources') {
             steps {
-                git url: 'https://github.com/tkgregory/sonarqube-jacoco-code-coverage.git'
+                git url: 'https://github.com/boonchu/gradle-jenkins-build.git'
             }
         }
         
