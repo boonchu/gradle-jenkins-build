@@ -51,7 +51,7 @@ spec:
             steps {
                 container("docker-compose") {
                    sh """
-                      cd src && docker-compose build
+                      docker-compose build
                    """
                 }
             }
