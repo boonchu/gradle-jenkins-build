@@ -14,6 +14,12 @@ spec:
     - sleep
     args:
     - 9999
+  - name: docker-compose
+    image: docker/compose:alpine-1.29.2
+    command:
+    - sleep
+    args:
+    - 9999
 '''
         }
     }
@@ -40,5 +46,14 @@ spec:
                 waitForQualityGate abortPipeline: true
             }
         }
+
+        stage('Docker Build') {
+            steps {
+                sh """
+                    cd src && docker-compose build
+                """
+            }
+        }
+
     }
 }
