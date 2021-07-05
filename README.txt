@@ -12,3 +12,8 @@ docker-compose up
 * https://asciinema.org/a/378669
 * https://rtfm.co.ua/en/jenkins-running-workers-in-kubernetes-and-docker-images-build/
 * https://docs.gitlab.com/ee/ci/docker/using_docker_build.html
+
+
+### Sets local Maven repository ###
+
+* https://docs.gradle.org/current/userguide/declaring_repositories.html
