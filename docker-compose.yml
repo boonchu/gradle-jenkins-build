@@ -1,6 +1,14 @@
 version: "3.7"
 services:
-  gradle:
-    build: ./src
+  gradle-java-build:
+    image: boonchu/gradle:java-build
+    container_name: gradle-java-build
+    build: ./src/gradle-java-build
     ports:
       - 9000:9000
+
+  docker-dind:
+    image: boonchu/docker:dind
+    container_name: docker-dind
+    build: ./src/docker-dind
+

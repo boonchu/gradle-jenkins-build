@@ -15,7 +15,7 @@ spec:
     args:
     - 9999
   - name: docker
-    image:  docker:dind
+    image:  boonchu/docker:dind
     securityContext:
       privileged: true
     env:
@@ -54,11 +54,6 @@ spec:
             steps {
                 container("docker") {
                    sh """
-                      apk update
-                      apk add --no-cache py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make cryptography==2.8
-                      pip install docker-compose
-                      docker info
-                      docker version
                       docker-compose build
                    """
                 }
