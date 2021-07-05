@@ -7,8 +7,8 @@ services:
     ports:
       - 9000:9000
 
-  docker-dind:
-    image: boonchu/docker:dind
-    container_name: docker-dind
-    build: ./src/docker-dind
-
+# special build to embed the docker-compose utility.
+#  docker-dind:
+#    image: boonchu/docker:dind
+#    container_name: docker-dind
+#    build: ./src/docker-dind

@@ -7,6 +7,11 @@ git clone https://github.com/boonchu/gradle-jenkins-build.git
 docker-compose build
 docker-compose up
 
+### Gradle .Dev ###
+
+* https://www.youtube.com/watch?v=5v92GbC9cqo
+* https://www.youtube.com/watch?v=6BTOd0X8UCs (Gradle and JaCoCo - JavaCodeCoverage)
+
 ### Docker in Docker Build ###
 
 * https://asciinema.org/a/378669
@@ -17,3 +22,4 @@ docker-compose up
 ### Sets local Maven repository ###
 
 * https://docs.gradle.org/current/userguide/declaring_repositories.html
+
