@@ -13,6 +13,7 @@ sourceCompatibility = 1.8
 repositories {
     maven {
         url "http://172.30.30.102:8081/repository/maven-central"
+        allowInsecureProtocol true
     }
 }
 
