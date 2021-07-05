@@ -1,5 +1,10 @@
 // Uses Declarative syntax to run commands inside a container.
 pipeline {
+    // 'environments'
+    environment {}
+    // * end of env *
+
+    // 'agent' statement
     agent {
         kubernetes {
             defaultContainer 'gradle'
@@ -26,10 +31,49 @@ spec:
 '''
         }
     }
+    // * end of agent *
+
+    // stage declarative statements
     stages {
-        stage('Clone sources') {
+        // https://github.com/devopscube/declarative-pipeline-examples/blob/master/parameters/Jenkinsfile.ActiveChoiceParameters
+        stage('Parameters') {
             steps {
-                git url: 'https://github.com/boonchu/gradle-jenkins-build.git'
+                script {
+                       properties([
+                            parameters([
+                                [$class: 'ChoiceParameter', 
+                                    choiceType: 'PT_SINGLE_SELECT', 
+                                    description: 'Select the branch from the Dropdown List', 
+                                    filterLength: 1, 
+                                    filterable: false, 
+                                    name: 'Env', 
+                                    script: [
+                                        $class: 'GroovyScript', 
+                                        fallbackScript: [
+                                            classpath: [], 
+                                            sandbox: false, 
+                                            script: 
+                                                "return['Could not get The environemnts']"
+                                        ], 
+                                        script: [
+                                            classpath: [], 
+                                            sandbox: false, 
+                                            script: 
+                                                "return['master','develop','release']"
+                                        ]
+                                    ]
+                                ]
+                            ])
+                        ])
+                } 
+            }
+        }
+        stage('Clone git project repo') {
+            steps {
+                sh """
+					echo "Pulling git branch  + ${GIT_BRANCH_NAME}"
+                """
+                git branch: "${GIT_BRANCH_NAME}", url: 'https://github.com/boonchu/gradle-jenkins-build.git'
             }
         }
         
@@ -60,4 +104,5 @@ spec:
             }
         }
     }
+    // * end of stage *
 }
