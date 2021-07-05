@@ -2,9 +2,9 @@
 FROM gradle:5.4.1-jdk8-alpine AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
-RUN gradle build --no-daemon 
+# RUN gradle build --no-daemon 
 # use latest gradle version
-# RUN ./gradlew build --no-daemon
+RUN ./gradlew build --no-daemon
 # RUN ls /home/gradle/src/build/libs/*.jar
 
 # stage 2
