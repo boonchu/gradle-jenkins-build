@@ -35,7 +35,7 @@ spec:
 
     // stage declarative statements
     stages {
-        // https://github.com/devopscube/declarative-pipeline-examples/blob/master/parameters/Jenkinsfile.ActiveChoiceParameters
+        // https://devopscube.com/declarative-pipeline-parameters/
         stage('Parameters') {
             steps {
                 script {
@@ -46,7 +46,7 @@ spec:
                                     description: 'Select the branch from the Dropdown List', 
                                     filterLength: 1, 
                                     filterable: false, 
-                                    name: 'Env', 
+                                    name: 'GIT_BRANCH_NAME', 
                                     script: [
                                         $class: 'GroovyScript', 
                                         fallbackScript: [
@@ -68,6 +68,7 @@ spec:
                 } 
             }
         }
+
         stage('Clone git project repo') {
             steps {
                 sh """
