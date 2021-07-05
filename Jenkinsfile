@@ -52,7 +52,11 @@ spec:
             steps {
                 container("docker") {
                    sh """
-                      docker version && docker-compose build
+                      apk add --no-cache py-pip
+                      pip install docker-compose
+                      docker info
+                      docker version
+                      docker-compose build
                    """
                 }
             }
