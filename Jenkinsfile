@@ -4,6 +4,12 @@ pipeline {
     // environment {}
     // * end of env *
 
+    // https://devopscube.com/declarative-pipeline-parameters/
+    parameters {
+        string(name: 'GIT_BRANCH_NAME', defaultValue: 'master', description: 'Git branch to use for the build.')
+    }
+    // * end of params *
+
     // 'agent' statement
     agent {
         kubernetes {
@@ -35,67 +41,12 @@ spec:
 
     // stage declarative statements
     stages {
-        // https://devopscube.com/declarative-pipeline-parameters/
-        stage('Parameters') {
-            steps {
-                script {
-                       properties([
-                            parameters([
-                                choice(
-                                    choices: ['ONE', 'TWO'], 
-                                    name: 'PARAMETER_01'
-                                ),
-                                booleanParam(
-                                    defaultValue: true, 
-                                    description: '', 
-                                    name: 'BOOLEAN'
-                                ),
-                                text(
-                                    defaultValue: '''
-                                    this is a multi-line 
-                                    string parameter example
-                                    ''', 
-                                     name: 'MULTI-LINE-STRING'
-                                ),
-                                string(
-                                    defaultValue: 'scriptcrunch', 
-                                    name: 'STRING-PARAMETER', 
-                                    trim: true
-                                ),
-                                [$class: 'ChoiceParameter', 
-                                    choiceType: 'PT_SINGLE_SELECT', 
-                                    description: 'Select the branch from the Dropdown List', 
-                                    filterLength: 1, 
-                                    filterable: false, 
-                                    name: 'GIT_BRANCH_NAME', 
-                                    script: [
-                                        $class: 'GroovyScript', 
-                                        fallbackScript: [
-                                            classpath: [], 
-                                            sandbox: false, 
-                                            script: 
-                                                "return['Could not get The environemnts']"
-                                        ], 
-                                        script: [
-                                            classpath: [], 
-                                            sandbox: false, 
-                                            script: 
-                                                "return['master','develop','release']"
-                                        ]
-                                    ]
-                                ]
-                            ])
-                        ])
-                } 
-            }
-        }
-
         stage('Clone git project repo') {
             steps {
                 sh """
-					echo "Pulling git branch  + ${GIT_BRANCH_NAME}"
+					echo "Pulling git branch  + ${params.GIT_BRANCH_NAME}"
                 """
-                git branch: "${GIT_BRANCH_NAME}", url: 'https://github.com/boonchu/gradle-jenkins-build.git'
+                git branch: "${params.GIT_BRANCH_NAME}", url: 'https://github.com/boonchu/gradle-jenkins-build.git'
             }
         }
         
