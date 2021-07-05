@@ -55,7 +55,7 @@ spec:
                 container("docker") {
                    sh """
                       apk update
-                      apk add --no-cache py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make
+                      apk add --no-cache py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make cryptography==2.8
                       pip install docker-compose
                       docker info
                       docker version
