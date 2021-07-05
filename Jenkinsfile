@@ -1,5 +1,16 @@
 // Uses Declarative syntax to run commands inside a container.
 pipeline {
+    // 'environments'
+    // environment {}
+    // * end of env *
+
+    // https://devopscube.com/declarative-pipeline-parameters/
+    parameters {
+        string(name: 'GIT_BRANCH_NAME', defaultValue: 'master', description: 'Git branch to use for the build.')
+    }
+    // * end of params *
+
+    // 'agent' statement
     agent {
         kubernetes {
             defaultContainer 'gradle'
@@ -26,10 +37,16 @@ spec:
 '''
         }
     }
+    // * end of agent *
+
+    // stage declarative statements
     stages {
-        stage('Clone sources') {
+        stage('Clone git project repo') {
             steps {
-                git url: 'https://github.com/boonchu/gradle-jenkins-build.git'
+                sh """
+					echo "Pulling git branch  + ${params.GIT_BRANCH_NAME}"
+                """
+                git branch: "${params.GIT_BRANCH_NAME}", url: 'https://github.com/boonchu/gradle-jenkins-build.git'
             }
         }
         
@@ -60,4 +77,5 @@ spec:
             }
         }
     }
+    // * end of stage *
 }
