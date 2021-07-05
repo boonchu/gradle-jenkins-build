@@ -50,7 +50,7 @@ spec:
 
         stage('Docker Build') {
             steps {
-                container("docker-compose") {
+                container("docker") {
                    sh """
                       docker version && docker-compose build
                    """
