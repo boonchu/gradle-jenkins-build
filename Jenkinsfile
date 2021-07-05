@@ -14,12 +14,13 @@ spec:
     - sleep
     args:
     - 9999
-  - name: docker-compose
-    image: docker/compose:alpine-1.29.2
-    command:
-    - sleep
-    args:
-    - 9999
+  - name: docker
+    image:  docker:19.03.1-dind
+    securityContext:
+      privileged: true
+    env:
+      - name: DOCKER_TLS_CERTDIR
+        value: ""
 '''
         }
     }
@@ -51,7 +52,7 @@ spec:
             steps {
                 container("docker-compose") {
                    sh """
-                      docker-compose build
+                      docker version && docker-compose build
                    """
                 }
             }
