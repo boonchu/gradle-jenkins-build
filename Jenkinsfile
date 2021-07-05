@@ -15,12 +15,14 @@ spec:
     args:
     - 9999
   - name: docker
-    image:  docker:19.03.1-dind
+    image:  docker:dind
     securityContext:
       privileged: true
     env:
       - name: DOCKER_TLS_CERTDIR
         value: ""
+      - name: DOCKER_DRIVER
+        value: "overlay2"
 '''
         }
     }
@@ -52,7 +54,8 @@ spec:
             steps {
                 container("docker") {
                    sh """
-                      apk add --no-cache py-pip
+                      apk update
+                      apk add --no-cache py-pip python3-dev libffi-dev openssl-dev gcc libc-dev make
                       pip install docker-compose
                       docker info
                       docker version
