@@ -1,7 +1,7 @@
 // Uses Declarative syntax to run commands inside a container.
 pipeline {
     // 'environments'
-    environment {}
+    // environment {}
     // * end of env *
 
     // 'agent' statement
