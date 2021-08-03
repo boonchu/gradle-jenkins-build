@@ -12,7 +12,7 @@ pipeline {
 		APP_NAME="api-db"
         TAG= "${params.IMAGE_TAG}"
         REGISTRY_PATH="docker-registry:5000/images/example"
-        IMAGE_FULL_PATH= "$REGISTRY_PATH/$APP_NAME:$TAG"
+        IMAGE_PATH= "$REGISTRY_PATH/$APP_NAME:$TAG"
 	}
     // * end of env *
 
@@ -21,7 +21,7 @@ pipeline {
      * agent {
      *     docker {
      *         label 'gradle-docker-slave'
-     *         image 'docker-registry:5000/images/example/gradle-builder:jdk11'
+     *         image 'docker-registry:5000/images/example/gradle:jdk11'
      *         args '-u root \
      *               -v /var/run/docker.sock:/var/run/docker.sock \
      *               -v "$PWD":/usr/app'
@@ -70,13 +70,15 @@ spec:
             }
         }
         
-        stage ('Test & Build Artifact') {
+        /*
+        stage ('Build Artifact') {
             steps {
                 sh """
 					cd src/gradle-java-build && ./gradlew --build-file build.gradle clean build -x test
 				"""
             }
         }
+        */
 
         stage('SonarQube Analysis') {
             steps {
@@ -104,6 +106,23 @@ spec:
                 }
             }
         }
+
+        stage ('kubernetes cluster deployment') {
+            steps {
+                script {
+                    withCredentials([file(credentialsId: 'kube_secret', variable: 'kube_config')])  {
+                        sh """
+                            kustomize edit set image $APP_NAME=$IMAGE_PATH;
+                            kustomize build deployments/overlays/envs/develop | kubectl apply --kubeconfig=$kube_config --record -f -
+                        """
+                        sh 'envsubst < deployments/configmap.yaml | kubectl --kubeconfig=$kube_config apply -f -'
+                        sh "kubectl delete --kubeconfig=$kube_config -f deployments/deployment.yaml"
+                        sh 'envsubst < deployments/deployment.yaml | kubectl --kubeconfig=$kube_config apply -f -'
+                    }
+                }
+            }
+        }
+
     }
     // * end of stage *
 }
