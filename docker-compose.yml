@@ -7,8 +7,15 @@ services:
     ports:
       - 9000:9000
 
+  spring-boot-api-example:
+    image: boonchu/spring-boot-api-example:gradle-build
+    container_name: spring-boot-api-example
+    build: ./src/spring-boot-api-example
+    ports:
+      - 8080:8080
+
 # special build to embed the docker-compose utility.
-#  docker-dind:
-#    image: boonchu/docker:dind
-#    container_name: docker-dind
-#    build: ./src/docker-dind
+  docker-dind:
+    image: boonchu/docker:dind
+    container_name: docker-dind
+    build: ./src/docker-dind
