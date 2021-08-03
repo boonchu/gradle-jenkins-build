@@ -17,17 +17,21 @@ pipeline {
     // * end of env *
 
     // 'agent' statement
+    /*
+     * agent {
+     *     docker {
+     *         label 'gradle-docker-slave'
+     *         image 'docker-registry:5000/images/example/gradle-builder:jdk11'
+     *         args '-u root \
+     *               -v /var/run/docker.sock:/var/run/docker.sock \
+     *               -v "$PWD":/usr/app'
+     *         reuseNode true
+     *     }
+	 * }
+     */
+
+    // 'agent' statement
     agent {
-
-        docker {
-            label 'gradle-docker-slave'
-            image 'docker-registry:5000/images/example/gradle-builder:jdk11'
-            args '-u root \
-                  -v /var/run/docker.sock:/var/run/docker.sock \
-                  -v "$PWD":/usr/app'
-            reuseNode true
-        }
-
         kubernetes {
             defaultContainer 'gradle'
             yaml '''
@@ -52,7 +56,6 @@ spec:
         value: "overlay2"
 '''
         }
-
     }
     // * end of agent *
 
@@ -67,6 +70,12 @@ spec:
             }
         }
         
+        stage ('Test & Build Artifact') {
+            steps {
+                sh './gradlew --build-file "build.gradle.kts" clean build -x test'
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonarqube-server') {
