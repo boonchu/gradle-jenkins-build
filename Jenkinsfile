@@ -72,7 +72,9 @@ spec:
         
         stage ('Test & Build Artifact') {
             steps {
-                sh './gradlew --build-file "build.gradle.kts" clean build -x test'
+                sh """
+					cd src/gradle-java-build && ./gradlew --build-file "build.gradle" clean build -x test'
+				"""
             }
         }
 
